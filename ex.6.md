@@ -1,11 +1,19 @@
 ```mermaid
 sequenceDiagram
-    participant User
-    participant SPA
-    participant Server
+    participant user
+    participant browser
+    participant server
 
-    User->>SPA: Write a new note in the text field
-    User->>SPA: Click Save button
-    SPA->>Server: Send the new note (text) to the server
-    Server->>SPA: Save the note and respond with success
-    SPA->>User: Display the new note in the list
+    user->>browser: Write note and click Save
+    Note right of browser: Browser captures the user input and prepares to send it to the server
+
+    browser->>server: POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa with note data
+    activate server
+    Note right of server: Server receives the new note data and saves it
+    server-->>browser: { "content": "new note", "date": "2024-5-30" }
+    deactivate server
+
+    Note right of browser: The browser updates the note list dynamically without reloading the page
+    browser->>browser: Render the new note in the list
+
+```
